@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4.1.1
 
       - name: Create tarball
         run: |
@@ -24,11 +24,11 @@ jobs:
 
       - name: Get Release
         id: get_release
-        uses: bruceadams/get-release@v1.2.0
+        uses: bruceadams/get-release@v1.3.2
 
       - name: Upload Release Tarball
         id: upload-release-tarball
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
           # This pulls from the Get Release step above,
@@ -40,7 +40,7 @@ jobs:
           asset_content_type: application/gzip
       - name: Upload Release Checksums
         id: upload-release-checksums
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
           # This pulls from the Get Release step above,
