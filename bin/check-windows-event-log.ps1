@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Returns all occurances of pattern in log file 
+    Returns all occurances of pattern in log file
 .DESCRIPTION
-    Checks Event log for pattern and returns the number criticals and warnings that match that pattern. 
+    Checks Event log for pattern and returns the number criticals and warnings that match that pattern.
 .Notes
     FileName    : check-windows-event-log.ps1
     Author      : Patrice White - patrice.white@ge.com
@@ -51,27 +51,27 @@ Param(
 )
 
 if ($CriticalLevel -in 0..5 -or $WarningLevel -in 0..5){
-    $Levels = (0..(($CriticalLevel,$WarningLevel) | Measure-Object -maximum).Maximum)
+  $Levels = (0..(($CriticalLevel,$WarningLevel) | Measure-Object -maximum).Maximum)
 }else{
-    throw "CriticalLevel or WarningLevel have to be between 0-5"
+  throw "CriticalLevel or WarningLevel have to be between 0-5"
 }
 
 $HashFilter = @{LogName = $LogName; Level= $Levels}
 
 if ($ProviderName.Length -gt 0)
 {
-    $HashFilter.Add("ProviderName",$ProviderName)
+  $HashFilter.Add("ProviderName",$ProviderName)
 }
 
 if ($TimeIntervall -gt 0 ){
-    $Date = (Get-Date).AddMinutes(-$TimeIntervall)
-    $HashFilter.Add("StartTime",$Date)
+  $Date = (Get-Date).AddMinutes(-$TimeIntervall)
+  $HashFilter.Add("StartTime",$Date)
 }
 
 $ThisEvent = Get-WinEvent -FilterHashtable $HashFilter -ErrorAction SilentlyContinue
 
 if ($Pattern.Length -gt 0){
-    $ThisEvent = $ThisEvent | Where-Object {$_.Message -like "*$($Pattern)*"}
+  $ThisEvent = $ThisEvent | Where-Object {$_.Message -like "*$($Pattern)*"}
 }
 
 $ThisEvent = $ThisEvent | Where-Object $additionalFilter
@@ -83,10 +83,10 @@ If ($null -ne $ThisEvent ){
 $CountCrits = 0
 $CountWarns = 0
 if ($CriticalLevel -le 5){
-    $CountCrits=($ThisEvent | Where-Object{$_.Level -le $CriticalLevel}).count
+  $CountCrits=($ThisEvent | Where-Object{$_.Level -le $CriticalLevel}).count
 }
 if ($WarningLevel -le 5){
-    $CountWarns=($ThisEvent | Where-Object{$_.Level -le $WarningLevel}).count
+  $CountWarns=($ThisEvent | Where-Object{$_.Level -le $WarningLevel}).count
 }
 
 if($CountCrits -eq 0 -And $CountWarns -eq 0){
@@ -94,10 +94,10 @@ if($CountCrits -eq 0 -And $CountWarns -eq 0){
   exit 0
 }
 elseIF ($CountCrits -gt 0) {
-    "CheckLog CRITICAL: $CountCrits criticals"
-    exit 2
+  "CheckLog CRITICAL: $CountCrits criticals"
+  exit 2
 }
 else {
-    "CheckLog WARNING: $CountWarns warnings"
-    exit 1
+  "CheckLog WARNING: $CountWarns warnings"
+  exit 1
 }
