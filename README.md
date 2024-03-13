@@ -74,11 +74,11 @@ NAME
     check-windows-event-log.ps1
 
 SYNOPSIS
-    Returns all occurances of pattern in log file
-
+    Returns all occurances of events based on given filter parameter in a event log
 
 SYNTAX
-    check-windows-event-log.ps1 [-LogName] <String> [-Pattern] <String>
+    check-windows-event-log.ps1 [-LogName] <String> [[-ProviderName] <String>]
+    [[-Pattern] <String>] [[-TimeIntervall] <Int32>] [[-additionalFilter] <ScriptBlock>]
     [[-CriticalLevel] <Int32>] [[-WarningLevel] <Int32>] [<CommonParameters>]
 
 DESCRIPTION
@@ -86,19 +86,30 @@ DESCRIPTION
 ```
 
 #### Param 1: LogName
-    Required. The name of the log file.
+    Required. The name of the log file. Allows wildcard.
     Example -LogName Application
 
-#### Param 2: Pattern
+#### Paran 2: ProviderName
+    Optional. Filter on Providername. Allows wildcard.
+
+#### Param 3: Pattern
     Required. The pattern you want to search for.
     Example -LogName Application -Pattern error
 
-#### Param 3: CriticalLevel
-    Optional. Integer Event Log Level to trigger Critical return status. Defaults to 2 = Error.
+#### Param 4 TimeIntervall
+    Optional. Set filter on Startdate depending on the time when the script runs in minutes.
+    Example -LogName Application -TimeIntervall 2
+
+#### Param 5 additionalFilter
+    Optional. Add custom "where" filter as a scriptblock
+    Example -LogName Application -additionalFilter {$_.Id -eq 1234}
+
+#### Param 6: CriticalLevel
+    Optional. Integer Event Log Level to trigger Critical return status. Defaults to 2 = Error. Set to greater than 5 to disable. Error if both CriticalLevel and WarningLevel are disabled!
     Example -LogName Application -Pattern error -CriticalLevel 2
 
-#### Param 4: WarningLevel
-    Optional. Integer Event Log Level to trigger Warning return status.  Defaults to 3 = Warning.
+#### Param 7: WarningLevel
+    Optional. Integer Event Log Level to trigger Warning return status.  Defaults to 3 = Warning. Set to greater than 5 to disable. Error if both CriticalLevel and WarningLevel are disabled!
     Example -LogName Application -Pattern error -WarningLevel 3
 
 #### Asset command usage

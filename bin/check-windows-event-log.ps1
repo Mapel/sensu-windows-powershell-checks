@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Returns all occurances of pattern in log file
+    Returns all occurances of events based on given filter parameter in a event log
 .DESCRIPTION
     Checks Event log for pattern and returns the number criticals and warnings that match that pattern.
 .Notes
@@ -20,7 +20,7 @@
     Optional. Set filter on Startdate depending on the time when the script runs in minutes.
     Example -LogName Application -TimeIntervall 2
 .PARAMETER additionalFilter
-    Optional. Add custom where filter as a scriptblock
+    Optional. Add custom "where" filter as a scriptblock
     Example -LogName Application -additionalFilter {$_.Id -eq 1234}
 .PARAMETER CriticalLevel
     Optional. Integer Event Log Level to trigger Critical return status. Defaults to 2 = Error. Set to greater than 5 to disable. Error if both CriticalLevel and WarningLevel are disabled!
