@@ -1,14 +1,14 @@
- <#
-.SYNOPSIS 
+<#
+.SYNOPSIS
     Returns all occurances of pattern in log file 
 .DESCRIPTION
     Checks Event log for pattern and returns the number criticals and warnings that match that pattern. 
 .Notes
     FileName    : check-windows-event-log.ps1
     Author      : Patrice White - patrice.white@ge.com
-.LINK 
+.LINK
     https://github.com/sensu-plugins/sensu-plugins-windows
-.PARAMETER LogName 
+.PARAMETER LogName
     Required. The name of the log file. Allows wildcard.
     Example -LogName Application
 .PARAMETER ProviderName
@@ -89,14 +89,15 @@ if ($WarningLevel -le 5){
     $CountWarns=($ThisEvent | Where-Object{$_.Level -le $WarningLevel}).count
 }
 
-If($CountCrits -eq 0 -And $CountWarns -eq 0){
+if($CountCrits -eq 0 -And $CountWarns -eq 0){
   "CheckLog OK"
-   EXIT 0
-}ElseIF ($CountCrits -gt 0) {
-    "CheckLog CRITICAL: $CountCrits criticals"
-    EXIT 2
+  exit 0
 }
-Else {
+elseIF ($CountCrits -gt 0) {
+    "CheckLog CRITICAL: $CountCrits criticals"
+    exit 2
+}
+else {
     "CheckLog WARNING: $CountWarns warnings"
-    EXIT 1
+    exit 1
 }
