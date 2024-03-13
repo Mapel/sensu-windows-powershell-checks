@@ -1,6 +1,7 @@
 name: Upload Asset
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - '**'
@@ -14,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create tarball 
+      - name: Create tarball
         run: |
           tar cvzf sensu-windows-powershell-checks.tar.gz bin README.md LICENSE
       - name: Create checksum
@@ -25,27 +26,27 @@ jobs:
         id: get_release
         uses: bruceadams/get-release@v1.2.0
 
-      - name: Upload Release Tarball 
-        id: upload-release-tarball 
+      - name: Upload Release Tarball
+        id: upload-release-tarball
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }} 
-          # This pulls from the Get Release step above, 
-          # referencing it's ID to get its outputs object, which include a `upload_url`. 
-          # See this blog post for more info: 
-          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          # This pulls from the Get Release step above,
+          # referencing it's ID to get its outputs object, which include a `upload_url`.
+          # See this blog post for more info:
+          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./sensu-windows-powershell-checks.tar.gz
           asset_name: sensu-windows-powershell-checks.tar.gz
           asset_content_type: application/gzip
       - name: Upload Release Checksums
-        id: upload-release-checksums 
+        id: upload-release-checksums
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }} 
-          # This pulls from the Get Release step above, 
-          # referencing it's ID to get its outputs object, which include a `upload_url`. 
-          # See this blog post for more info: 
-          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          # This pulls from the Get Release step above,
+          # referencing it's ID to get its outputs object, which include a `upload_url`.
+          # See this blog post for more info:
+          # https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./sha512-checksums.txt
           asset_name: sha512-checksums.txt
           asset_content_type: text/plain
