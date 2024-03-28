@@ -74,6 +74,12 @@ foreach ($device in $devices){
         "Disk Smart_Status not passed: $($smart_result.device) - $($smart_result.smart_status) "
         $exit_code = 2
     }
+
+    $ud = Get-Disk | Where-Object { $_.HealthStatus -ne "Healthy" }
+    if ($ud.Count -gt 0){
+        $ud
+        $exit_code = 2
+    }
 }
 
 exit $exit_code
