@@ -58,14 +58,14 @@ $PATHTOSMARTCTL = "& '$PATHTOSMARTCTL'"
 $ThisProcess = Get-Process -Id $pid
 $ThisProcess.PriorityClass = "BelowNormal"
 
-$scan_result = Invoke-Expression "$PATHTOSMARTCTL --scan --json" | ConvertFrom-Json 
+$scan_result = "$(Invoke-Expression "$PATHTOSMARTCTL --scan --json")" | ConvertFrom-Json 
 
 $devices = $scan_result.devices | Where-Object { $_.name -notmatch $EXCLUDEPATTERN }
 
 $exit_code = 0
 
 foreach ($device in $devices){
-    $smart_result = Invoke-Expression "$PATHTOSMARTCTL -H --json $($device.name)" | ConvertFrom-Json
+    $smart_result = "$(Invoke-Expression "$PATHTOSMARTCTL -H --json $($device.name)")" | ConvertFrom-Json
     
     if (-Not ($smart_result.PSObject.Properties.Name -Contains "smart_status")){
         "Smartctl failed: $($smart_result.smartctl.messages.string)"
